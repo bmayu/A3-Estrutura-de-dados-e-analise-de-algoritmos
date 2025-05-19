@@ -22,3 +22,6 @@ Integrantes do Grupo
 
 Período
 1º semestre de 2025 – Disciplina: Estrutura de dados e análise de algorítmos
+
+https://www.bcb.gov.br/meubc/faqs/p/vitima-fez-compra-com-cartao-e-caiu-em-golpe
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
