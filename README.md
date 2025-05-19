@@ -6,7 +6,7 @@ Este projeto tem como objetivo desenvolver uma aplicação para informar e alert
 
  Tecnologias Utilizadas
 - **Linguagem:** Java  
-- **Banco de Dados:** MySQL ou MongoDB  
+- **Banco de Dados:** MySQL 
 - **Frontend:**
 - **Hospedagem:** Microsoft Azure  
 - **Ferramentas:** Git, GitHub
