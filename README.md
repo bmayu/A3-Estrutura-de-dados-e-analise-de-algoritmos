@@ -9,7 +9,7 @@ Este projeto tem como objetivo desenvolver uma aplicação para informar e alert
 - **Banco de Dados:** MySQL 
 - **Frontend:**
 - **Hospedagem:** Microsoft Azure  
-- **Ferramentas:** Git, GitHub
+- **Ferramentas:** GitHub
 
 Integrantes do Grupo
 - Bárbara Cervígni Silva – RA: 12522225785 barbara123cervigni@gmail.com
