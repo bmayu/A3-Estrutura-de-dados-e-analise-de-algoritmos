@@ -7,10 +7,10 @@ Este projeto tem como objetivo desenvolver uma aplicação para informar e alert
  Tecnologias Utilizadas
 - **Linguagem:** Python
 - **Modelo machine learning:** Random Forest
-- **Banco de Dados:** MySQL 
+- **Banco de Dados:** MySQL, Pandas DataFrame
 - **Visualização:** Matplotlib e Seaborn
 - **Hospedagem:** Microsoft Azure  
-- **Ferramentas:** GitHub
+- **Ferramentas:** GitHub, Google colab
 
 Integrantes do Grupo
 - Bárbara Cervígni Silva – RA: 12522225785 barbara123cervigni@gmail.com
