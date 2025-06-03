@@ -8,7 +8,7 @@ Este projeto tem como objetivo desenvolver uma aplicação para informar e alert
 - **Linguagem:** Python
 - **Modelo machine learning:** Random Forest
 - **Banco de Dados:** MySQL 
-- **Frontend:**
+- **Visualização:** Matplotlib e Seaborn
 - **Hospedagem:** Microsoft Azure  
 - **Ferramentas:** GitHub
 
