@@ -5,7 +5,8 @@ Resumo do Projeto
 Este projeto tem como objetivo desenvolver uma aplicação para informar e alertar os usuários sobre os principais golpes financeiros praticados no Brasil, com base nos dados divulgados pelo Banco Central. A solução visa aumentar a conscientização da população e fornecer ferramentas educativas e tecnológicas para evitar fraudes.
 
  Tecnologias Utilizadas
-- **Linguagem:** Java  
+- **Linguagem:** Python
+- **Modelo machine learning:** Random Forest
 - **Banco de Dados:** MySQL 
 - **Frontend:**
 - **Hospedagem:** Microsoft Azure  
