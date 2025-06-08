@@ -91,7 +91,6 @@ class ManualDecisionTree:
         return self.entropy(y) - weighted_entropy
     
     def find_best_split(self, X, y):
-        """Encontra a melhor divisão para os dados"""
         best_feature = None
         best_threshold = None
         best_gain = -1
@@ -115,7 +114,6 @@ class ManualDecisionTree:
         return best_feature, best_threshold, best_gain
     
     def build_tree(self, X, y, depth=0):
-        """Constrói a árvore recursivamente"""
         node = DecisionTreeNode()
         node.samples = len(y)
         node.gini = self.gini_impurity(y)
@@ -200,7 +198,6 @@ class ManualDecisionTree:
             self.feature_importances_ /= self.feature_importances_.sum()
     
     def predict_sample(self, x):
-        """Prediz uma única amostra"""
         node = self.root
         
         while not node.is_leaf():
@@ -212,14 +209,12 @@ class ManualDecisionTree:
         return node.value
     
     def predict(self, X):
-        """Prediz múltiplas amostras"""
         predictions = []
         for x in X:
             predictions.append(self.predict_sample(x))
         return np.array(predictions)
 
 class ManualRandomForest:
-    """Random Forest implementado manualmente"""
     
     def __init__(self, n_estimators=100, max_depth=10, min_samples_split=5, 
                  min_samples_leaf=2, max_features='sqrt', random_state=42):
@@ -239,7 +234,6 @@ class ManualRandomForest:
         return X[indices], y[indices]
     
     def _get_feature_subset(self, n_features):
-        """Seleciona subconjunto de features"""
         if self.max_features == 'sqrt':
             max_features = int(sqrt(n_features))
         elif self.max_features == 'log2':
@@ -255,7 +249,7 @@ class ManualRandomForest:
     
     def fit(self, X, y):
         """Treina o Random Forest"""
-        print(f"🌳 Treinando Random Forest com {self.n_estimators} árvores...")
+        print(f"Treinando Random Forest com {self.n_estimators} árvores...")
         
         if self.random_state:
             np.random.seed(self.random_state)
@@ -292,7 +286,6 @@ class ManualRandomForest:
         print("✅ Random Forest treinado com sucesso!")
     
     def _calculate_feature_importances(self, n_features):
-        """Calcula importância média das features"""
         self.feature_importances_ = np.zeros(n_features)
         
         for tree, feature_indices in self.trees:
@@ -307,7 +300,6 @@ class ManualRandomForest:
             self.feature_importances_ /= self.feature_importances_.sum()
     
     def predict(self, X):
-        """Predição por votação majoritária"""
         predictions = np.zeros((X.shape[0], self.n_estimators))
         
         for i, (tree, feature_indices) in enumerate(self.trees):
@@ -323,7 +315,6 @@ class ManualRandomForest:
         return np.array(final_predictions)
     
     def predict_proba(self, X):
-        """Predição de probabilidades"""
         predictions = np.zeros((X.shape[0], self.n_estimators))
         
         for i, (tree, feature_indices) in enumerate(self.trees):
@@ -343,7 +334,6 @@ class ManualRandomForest:
         return probabilities
 
 class FraudDetectionSystem:
-    """Sistema de Detecção de Fraudes para Credit Card Dataset"""
     
     def __init__(self):
         self.model = None
@@ -359,20 +349,20 @@ class FraudDetectionSystem:
         """Cria a pasta imagens se não existir"""
         if not os.path.exists('imagens'):
             os.makedirs('imagens')
-            print("📁 Pasta 'imagens' criada")
+            print(" Pasta 'imagens' criada")
     
     def carregar_dados(self, caminho_arquivo):
         """Carrega dados do Credit Card Fraud Dataset"""
-        print(f"📂 Carregando Credit Card Fraud Dataset de {caminho_arquivo}...")
+        print(f" Carregando Credit Card Fraud Dataset de {caminho_arquivo}...")
         try:
             df = pd.read_csv(caminho_arquivo)
-            print(f"✅ Dados carregados: {len(df)} registros, {len(df.columns)} colunas")
+            print(f" Dados carregados: {len(df)} registros, {len(df.columns)} colunas")
             
             # Verificar estrutura esperada do dataset
             expected_columns = ['Time', 'Amount', 'Class'] + [f'V{i}' for i in range(1, 29)]
             
             if 'Class' not in df.columns:
-                print("⚠️ Coluna 'Class' não encontrada!")
+                print(" Coluna 'Class' não encontrada!")
                 return None
             
             # Armazenar informações dos dados
@@ -695,7 +685,7 @@ class FraudDetectionSystem:
             ax.set_yticks(y_pos)
             ax.set_yticklabels(features, color='white', fontsize=11)
             ax.set_xlabel('Importância da Feature', fontsize=14, fontweight='bold', color='white')
-            ax.set_title(f'🌳 TOP {top_n} FEATURES MAIS IMPORTANTES\nRANDOM FOREST MANUAL', 
+            ax.set_title(f' TOP {top_n} FEATURES MAIS IMPORTANTES\nRANDOM FOREST MANUAL', 
                         fontsize=16, fontweight='bold', pad=20, color='white')
             
             # Configurar eixos
