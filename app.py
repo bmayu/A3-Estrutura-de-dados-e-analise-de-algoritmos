@@ -23,7 +23,6 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 class AnimatedProgressBar(ctk.CTkProgressBar):
-    """Barra de progresso animada MELHORADA"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.target_value = 0
@@ -63,14 +62,12 @@ class AnimatedProgressBar(ctk.CTkProgressBar):
         animate_step(0)
     
     def set_immediate(self, value):
-        """Define valor imediatamente sem animação"""
         if self.animation_id:
             self.after_cancel(self.animation_id)
         self.animation_running = False
         self.set(value)
 
 class ModernCard(ctk.CTkFrame):
-    """Card moderno com animações"""
     def __init__(self, parent, title, value, icon, color, **kwargs):
         super().__init__(parent, **kwargs)
         
@@ -133,7 +130,6 @@ class ModernCard(ctk.CTkFrame):
         self.value_label.configure(text=new_value)
 
 class RealTimeChart(ctk.CTkFrame):
-    """Gráfico em tempo real integrado CORRIGIDO"""
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.setup_chart()
@@ -186,7 +182,6 @@ class RealTimeChart(ctk.CTkFrame):
         self.canvas.draw()
     
     def load_image_from_file(self, image_path):
-        """NOVO: Carrega imagem de arquivo para exibir no canvas"""
         try:
             if os.path.exists(image_path):
                 self.ax.clear()
@@ -207,7 +202,6 @@ class RealTimeChart(ctk.CTkFrame):
             return False
     
     def show_error_message(self, message):
-        """Mostra mensagem de erro no gráfico"""
         self.ax.clear()
         self.ax.text(0.5, 0.5, f'❌ {message}', 
                     ha='center', va='center', transform=self.ax.transAxes,
@@ -217,7 +211,6 @@ class RealTimeChart(ctk.CTkFrame):
         self.canvas.draw()
 
 class AdvancedDataTable(ctk.CTkScrollableFrame):
-    """Tabela de dados avançada com filtros e paginação"""
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.df = None
@@ -350,7 +343,6 @@ class FraudDetectionApp(ctk.CTk):
         self.geometry("1400x900")
         self.minsize(1200, 800)
         
-        # CORRIGIDO: Instanciar o sistema de backend
         self.fraud_system = FraudDetectionSystem()
         
         # Variáveis de estado
@@ -732,7 +724,6 @@ class FraudDetectionApp(ctk.CTk):
         )
         self.report_buttons['full_report'].grid(row=1, column=1, padx=10, pady=10)
         
-# NOVO: Área para exibir gráficos diretamente na interface
         self.reports_content = ctk.CTkFrame(page)
         self.reports_content.pack(fill="both", expand=True, padx=20, pady=20)
         
@@ -743,7 +734,6 @@ class FraudDetectionApp(ctk.CTk):
         return page
     
     def create_data_page(self):
-        """Cria página de visualização de dados simplificada"""
         page = ctk.CTkFrame(self.content_area, fg_color="transparent")
         
         title_label = ctk.CTkLabel(
@@ -760,7 +750,6 @@ class FraudDetectionApp(ctk.CTk):
         return page
     
     def create_settings_page(self):
-        """Cria página de configurações"""
         page = ctk.CTkFrame(self.content_area, fg_color="transparent")
         
         title_label = ctk.CTkLabel(
@@ -816,7 +805,6 @@ class FraudDetectionApp(ctk.CTk):
         return page
     
     def upload_csv(self):
-        """CORRIGIDO: Carrega arquivo CSV com progresso real"""
         file_path = filedialog.askopenfilename(
             title="Selecionar Dataset CSV",
             filetypes=[
@@ -908,7 +896,6 @@ class FraudDetectionApp(ctk.CTk):
         threading.Thread(target=load_file_threaded, daemon=True).start()
     
     def start_complete_analysis(self):
-        """CORRIGIDO: Inicia análise completa com progresso real"""
         if self.df is None:
             messagebox.showwarning("Aviso", "Carregue um dataset primeiro!")
             return
@@ -925,7 +912,6 @@ class FraudDetectionApp(ctk.CTk):
         self.analysis_thread.start()
     
     def process_analysis_corrected(self):
-        """CORRIGIDO: Processa análise completa com callbacks de progresso FUNCIONAIS"""
         try:
             # Etapa 1: Análise exploratória
             self.update_progress_threaded(0.15, "📊 Realizando análise exploratória...")
@@ -967,7 +953,7 @@ class FraudDetectionApp(ctk.CTk):
             self.after(0, lambda: self.on_analysis_error_corrected(str(e)))
     
     def update_progress_threaded(self, value, text):
-        """Atualiza progresso de forma thread-safe"""
+
         def update_ui():
             try:
                 if hasattr(self, 'progress_bar') and hasattr(self, 'progress_label'):
@@ -986,7 +972,7 @@ class FraudDetectionApp(ctk.CTk):
             print(f"Erro ao agendar atualização: {e}")
     
     def on_analysis_complete_corrected(self):
-        """Callback quando análise é concluída"""
+
         try:
             processing_time = time.time() - self.processing_start_time if self.processing_start_time else 0
             
@@ -1057,7 +1043,6 @@ class FraudDetectionApp(ctk.CTk):
             print(f"Erro ao carregar gráfico de análise: {e}")
     
     def update_model_info_corrected(self):
-        """Atualiza informações detalhadas do modelo"""
         try:
             # Limpar conteúdo anterior
             if hasattr(self, 'model_info_frame'):
@@ -1126,7 +1111,6 @@ class FraudDetectionApp(ctk.CTk):
             print(f"Erro ao atualizar informações do modelo: {e}")
     
     def show_distribution_chart_corrected(self):
-        """CORRIGIDO: Mostra gráfico de distribuição na interface"""
         try:
             image_path = "imagens/grafico_distribuicao.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1139,7 +1123,6 @@ class FraudDetectionApp(ctk.CTk):
             messagebox.showerror("Erro", f"Erro ao carregar gráfico:\n{str(e)}")
     
     def show_confusion_matrix_corrected(self):
-        """CORRIGIDO: Mostra matriz de confusão na interface"""
         try:
             image_path = "imagens/matriz_confusao.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1151,7 +1134,6 @@ class FraudDetectionApp(ctk.CTk):
             messagebox.showerror("Erro", f"Erro ao carregar matriz:\n{str(e)}")
     
     def show_feature_importance_corrected(self):
-        """CORRIGIDO: Mostra importância dos atributos na interface"""
         try:
             image_path = "imagens/importancia.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1163,7 +1145,6 @@ class FraudDetectionApp(ctk.CTk):
             messagebox.showerror("Erro", f"Erro ao carregar gráfico:\n{str(e)}")
     
     def generate_full_report_corrected(self):
-        """CORRIGIDO: Gera e exibe relatório completo"""
         try:
             # Abrir o arquivo de relatório se existir
             report_path = "relatorio_fraudes.txt"
@@ -1188,7 +1169,6 @@ class FraudDetectionApp(ctk.CTk):
             messagebox.showerror("Erro", f"Erro ao abrir relatório:\n{str(e)}")
     
     def export_results(self):
-        """Exporta resultados da análise"""
         if self.df is None or not hasattr(self.fraud_system, 'model') or self.fraud_system.model is None:
             messagebox.showwarning("Aviso", "Execute uma análise primeiro!")
             return
@@ -1262,7 +1242,6 @@ class FraudDetectionApp(ctk.CTk):
             raise
     
     def export_to_csv(self, path):
-        """Exporta para CSV"""
         try:
             self.df.to_csv(path, index=False)
             print(f"✅ Dados exportados para CSV: {path}")
@@ -1271,7 +1250,6 @@ class FraudDetectionApp(ctk.CTk):
             raise
     
     def export_to_json(self, path):
-        """Exporta para JSON"""
         try:
             data_info = getattr(self.fraud_system, 'data_info', {})
             metrics = getattr(self.fraud_system, 'metrics', {})
@@ -1322,7 +1300,6 @@ class FraudDetectionApp(ctk.CTk):
         self.cards['rate'].update_value(f"{fraud_rate:.2f}%")
     
     def show_page(self, page_name):
-        """Mostra a página especificada"""
         # Esconder todas as páginas
         for page in self.pages.values():
             page.pack_forget()
@@ -1339,7 +1316,6 @@ class FraudDetectionApp(ctk.CTk):
                 btn.configure(fg_color="transparent")
     
     def create_enhanced_status_bar(self):
-        """Cria barra de status melhorada"""
         status_frame = ctk.CTkFrame(self, height=40, corner_radius=0)
         status_frame.pack(fill="x", side="bottom")
         
@@ -1377,7 +1353,6 @@ class FraudDetectionApp(ctk.CTk):
         self.update_timestamp()
     
     def update_timestamp(self):
-        """Atualiza o timestamp na barra de status"""
         self.timestamp_label.configure(text=datetime.now().strftime("%H:%M:%S"))
         self.after(1000, self.update_timestamp)
     
@@ -1403,7 +1378,7 @@ class FraudDetectionApp(ctk.CTk):
         pass
 
 if __name__ == "__main__":
-    print("🚀 Iniciando Sistema de Detecção de Fraudes v3.0")
+    print("Iniciando Sistema de Detecção de Fraudes")
     print("=" * 60)
     
     try:
