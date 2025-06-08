@@ -1,4 +1,4 @@
-# backend.py - RANDOM FOREST MANUAL PARA CREDIT CARD FRAUD DETECTION
+
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -23,7 +23,7 @@ class DecisionTreeNode:
         self.threshold = None
         self.left = None
         self.right = None
-        self.value = None  # Para nós folha
+        self.value = None  
         self.samples = 0
         self.gini = 0.0
         
@@ -402,7 +402,7 @@ class FraudDetectionSystem:
             # Contar classes
             class_counts = df['Class'].value_counts().sort_index()
             
-            # Criar gráfico moderno
+            # Cria gráfico 
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8), facecolor='#2b2b2b')
             
             # Gráfico de barras
@@ -636,21 +636,21 @@ class FraudDetectionSystem:
                 plt.close(fig)
             
             # Imprimir métricas
-            print(f"\n🎯 === MÉTRICAS DO RANDOM FOREST MANUAL ===")
-            print(f"📊 Acurácia: {accuracy:.4f} ({accuracy*100:.2f}%)")
-            print(f"🎱 Precisão: {precision:.4f} ({precision*100:.2f}%)")
-            print(f"🎪 Recall: {recall:.4f} ({recall*100:.2f}%)")
-            print(f"📈 F1-Score: {f1:.4f}")
-            print(f"✅ True Positives: {tp:,}")
-            print(f"❌ False Positives: {fp:,}")
-            print(f"✅ True Negatives: {tn:,}")
-            print(f"❌ False Negatives: {fn:,}")
+            print(f"\n MÉTRICAS")
+            print(f" Acurácia: {accuracy:.4f} ({accuracy*100:.2f}%)")
+            print(f" Precisão: {precision:.4f} ({precision*100:.2f}%)")
+            print(f" Recall: {recall:.4f} ({recall*100:.2f}%)")
+            print(f" F1-Score: {f1:.4f}")
+            print(f" True Positives: {tp:,}")
+            print(f" False Positives: {fp:,}")
+            print(f" True Negatives: {tn:,}")
+            print(f" False Negatives: {fn:,}")
             print(f"==========================================\n")
             
             return y_pred
             
         except Exception as e:
-            print(f"❌ Erro na avaliação: {str(e)}")
+            print(f" Erro na avaliação: {str(e)}")
             if 'fig' in locals():
                 plt.close(fig)
             return None
@@ -658,10 +658,10 @@ class FraudDetectionSystem:
     def mostrar_importancia(self, salvar_arquivo=True, mostrar_plot=False, top_n=15):
         """Mostra importância das features do Random Forest manual"""
         if self.model is None:
-            print("❌ Modelo não foi treinado!")
+            print(" Modelo não foi treinado.")
             return None
             
-        print("🔍 Analisando importância das features...")
+        print("Analisando importância das features...")
         self.criar_pasta_imagens()
         
         try:
@@ -725,13 +725,13 @@ class FraudDetectionSystem:
             else:
                 plt.close(fig)
             
-            print("✅ Análise de importância concluída!")
+            print(" Análise de importância concluída.")
             
             # Retornar top 5 para exibição
             return dict(top_features[:5])
             
         except Exception as e:
-            print(f"❌ Erro na análise de importância: {str(e)}")
+            print(f" Erro na análise de importância: {str(e)}")
             if 'fig' in locals():
                 plt.close(fig)
             return None
@@ -739,7 +739,7 @@ class FraudDetectionSystem:
     def gerar_relatorio_completo(self):
         """Gera relatório completo da análise"""
         if not self.metrics or not self.data_info:
-            print("❌ Execute a análise completa antes de gerar o relatório!")
+            print(" Execute a análise completa antes de gerar o relatório!")
             return False
             
         print("📄 Gerando relatório completo...")
@@ -759,17 +759,15 @@ class FraudDetectionSystem:
             taxa_fraude = (total_fraudes / total_transacoes) * 100 if total_transacoes > 0 else 0
             
             relatorio = f"""
-=== RELATÓRIO COMPLETO - DETECÇÃO DE FRAUDES ===
-🏦 CREDIT CARD FRAUD DETECTION COM RANDOM FOREST MANUAL
-
-📊 RESUMO DOS DADOS:
+RELATÓRIO COMPLETO - DETECÇÃO DE FRAUDES
+ RESUMO DOS DADOS:
 • Dataset: Credit Card Fraud Detection (Kaggle)
 • Total de transações analisadas: {total_transacoes:,}
 • Transações fraudulentas: {total_fraudes:,} ({taxa_fraude:.3f}%)
 • Transações legítimas: {total_legitimas:,} ({100-taxa_fraude:.3f}%)
 • Features analisadas: {self.data_info['total_features']} (V1-V28, Time, Amount)
 
-🌳 MODELO IMPLEMENTADO:
+ MODELO IMPLEMENTADO:
 • Algoritmo: Random Forest Manual (Implementação própria)
 • Estrutura: {self.model.n_estimators if self.model else 50} Árvores de Decisão
 • Profundidade máxima: {self.model.max_depth if self.model else 15}
@@ -777,19 +775,19 @@ class FraudDetectionSystem:
 • Balanceamento: Undersampling (3:1 ratio)
 • Features por árvore: √n_features (random subset)
 
-📈 PERFORMANCE DO MODELO:
+ PERFORMANCE DO MODELO:
 • Acurácia: {self.metrics['accuracy']:.4f} ({self.metrics['accuracy']*100:.2f}%)
 • Precisão: {self.metrics['precision']:.4f} ({self.metrics['precision']*100:.2f}%)
 • Recall: {self.metrics['recall']:.4f} ({self.metrics['recall']*100:.2f}%)
 • F1-Score: {self.metrics['f1_score']:.4f}
 
-🎯 MATRIZ DE CONFUSÃO:
+ MATRIZ DE CONFUSÃO:
 • True Positives (Fraudes detectadas): {self.metrics.get('tp', 0):,}
 • False Positives (Falsos alarmes): {self.metrics.get('fp', 0):,}
 • True Negatives (Legítimas corretas): {self.metrics.get('tn', 0):,}
 • False Negatives (Fraudes perdidas): {self.metrics.get('fn', 0):,}
 
-🔍 TOP 5 FEATURES MAIS IMPORTANTES:
+TOP 5 FEATURES MAIS IMPORTANTES:
 """
             
             # Adicionar top features ao relatório
@@ -797,12 +795,12 @@ class FraudDetectionSystem:
                 relatorio += f"• {i}º lugar: {feature} (Importância: {importance:.4f})\n"
             
             relatorio += f"""
-📚 INTERPRETAÇÃO DOS RESULTADOS:
+INTERPRETAÇÃO DOS RESULTADOS:
 • Precisão: {self.metrics['precision']*100:.1f}% das transações classificadas como fraude são realmente fraudes
 • Recall: {self.metrics['recall']*100:.1f}% das fraudes reais foram detectadas pelo modelo
 • F1-Score: {self.metrics['f1_score']:.3f} indica {'excelente' if self.metrics['f1_score'] > 0.9 else 'bom' if self.metrics['f1_score'] > 0.8 else 'moderado' if self.metrics['f1_score'] > 0.6 else 'baixo'} equilíbrio entre precisão e recall
 
-⚙️ IMPLEMENTAÇÃO TÉCNICA:
+IMPLEMENTAÇÃO TÉCNICA:
 • Árvores de Decisão: Implementação manual com critério de entropia
 • Divisão de nós: Busca exaustiva pelo melhor threshold
 • Parada: Profundidade máxima, mínimo de amostras por nó
@@ -810,19 +808,19 @@ class FraudDetectionSystem:
 • Votação: Majoritária para classificação final
 • Probabilidades: Baseadas na proporção de votos
 
-📁 ARQUIVOS GERADOS:
+ARQUIVOS GERADOS:
 • imagens/grafico_distribuicao.png - Distribuição das classes do dataset
 • imagens/matriz_confusao.png - Matriz de confusão do Random Forest
 • imagens/importancia.png - Importância das features
 • relatorio_fraudes.txt - Este relatório completo
 
-🎯 CARACTERÍSTICAS DO DATASET:
+CARACTERÍSTICAS DO DATASET:
 • V1-V28: Features transformadas por PCA (Principal Component Analysis)
 • Time: Segundos decorridos desde a primeira transação
 • Amount: Valor da transação em euros
 • Class: 0 = Legítima, 1 = Fraude
 
-⚠️ RECOMENDAÇÕES PARA PRODUÇÃO:
+RECOMENDAÇÕES PARA PRODUÇÃO:
 • Implementar monitoramento contínuo de drift nos dados
 • Retreinar modelo periodicamente com novos dados
 • Considerar ensemble com outros algoritmos (SVM, Neural Networks)
@@ -832,19 +830,19 @@ class FraudDetectionSystem:
 • Manter logs detalhados para auditoria e compliance
 • Considerar técnicas de balanceamento mais sofisticadas (SMOTE, ADASYN)
 
-🔒 CONSIDERAÇÕES DE SEGURANÇA:
+CONSIDERAÇÕES DE SEGURANÇA:
 • Validar integridade dos dados de entrada
 • Implementar controles de acesso ao modelo
 • Criptografar dados sensíveis em trânsito e em repouso
 • Manter backup do modelo treinado
 • Implementar rate limiting para prevenção de ataques
 
-📊 MÉTRICAS DE NEGÓCIO:
+ MÉTRICAS DE NEGÓCIO:
 • Taxa de Falsos Positivos: {(self.metrics.get('fp', 0) / (self.metrics.get('fp', 0) + self.metrics.get('tn', 1))) * 100:.2f}%
 • Taxa de Falsos Negativos: {(self.metrics.get('fn', 0) / (self.metrics.get('fn', 0) + self.metrics.get('tp', 1))) * 100:.2f}%
 • Especificidade: {(self.metrics.get('tn', 0) / (self.metrics.get('tn', 0) + self.metrics.get('fp', 1))) * 100:.2f}%
 
-✅ STATUS: {'✅ Modelo apresenta excelente performance para detecção de fraudes' if self.metrics['f1_score'] > 0.8 else '⚠️ Modelo necessita ajustes nos hiperparâmetros'}
+ STATUS: {' Modelo apresenta excelente performance para detecção de fraudes' if self.metrics['f1_score'] > 0.8 else ' Modelo necessita ajustes nos hiperparâmetros'}
 
 === FIM DO RELATÓRIO ===
 Gerado automaticamente pelo Sistema de Detecção de Fraudes v3.0
@@ -854,7 +852,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
             # Salvar relatório em arquivo
             with open('relatorio_fraudes.txt', 'w', encoding='utf-8') as f:
                 f.write(relatorio)
-            print("💾 Relatório salvo em: relatorio_fraudes.txt")
+            print("Relatório salvo em: relatorio_fraudes.txt")
             
             return True
             
@@ -899,8 +897,8 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
     
     def executar_pipeline_completo(self, caminho_csv, mostrar_plots=False):
         """Executa todo o pipeline de análise"""
-        print("🚀 Iniciando Sistema de Detecção de Fraudes")
-        print("🏦 Credit Card Fraud Detection com Random Forest Manual")
+        print("Iniciando Sistema de Detecção de Fraudes")
+        print(Credit Card Fraud Detection com Random Forest Manual")
         print("=" * 60)
         
         try:
@@ -931,28 +929,28 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
             # 7. Gerar relatório completo
             self.gerar_relatorio_completo()
             
-            print("\n🎉 Pipeline executado com sucesso!")
-            print("📁 Verifique a pasta 'imagens' para os gráficos gerados")
-            print("📄 Verifique o arquivo 'relatorio_fraudes.txt' para o relatório completo")
-            print("🌳 Random Forest Manual treinado e pronto para uso!")
+            print("\n Pipeline executado com sucesso!")
+            print(" Verifique a pasta 'imagens' para os gráficos gerados")
+            print(" Verifique o arquivo 'relatorio_fraudes.txt' para o relatório completo")
+            print(" Random Forest Manual treinado e pronto para uso!")
             
             return True
             
         except Exception as e:
-            print(f"❌ Erro no pipeline: {str(e)}")
+            print(f" Erro no pipeline: {str(e)}")
             return False
     
     def demonstracao_dados_sinteticos(self, mostrar_plots=False):
         """Demonstração do sistema com dados sintéticos do tipo Credit Card"""
-        print("🎯 Executando demonstração com dados sintéticos...")
-        print("🏦 Simulando Credit Card Fraud Dataset...")
+        print(" Executando demonstração com dados sintéticos...")
+        print(" Simulando Credit Card Fraud Dataset...")
         
         # Criar dados sintéticos similares ao dataset real
         np.random.seed(42)
         n_samples = 10000
         n_frauds = 300  # ~3% como no dataset real
         
-        print(f"🔧 Gerando {n_samples} transações sintéticas ({n_frauds} fraudes)")
+        print(f Gerando {n_samples} transações sintéticas ({n_frauds} fraudes)")
         
         # Gerar features V1-V28 (simulando PCA components)
         legitimate_features = np.random.normal(0, 1, (n_samples - n_frauds, 28))
@@ -980,7 +978,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
         # Embaralhar dados
         df_synthetic = df_synthetic.sample(frac=1, random_state=42).reset_index(drop=True)
         
-        print("📊 Executando pipeline com dados sintéticos...")
+        print(" Executando pipeline com dados sintéticos...")
         
         # Armazenar informações dos dados
         self.data_info = {
@@ -1000,18 +998,18 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
                 self.mostrar_importancia(mostrar_plot=mostrar_plots)
                 self.gerar_relatorio_completo()
         
-        print("✅ Demonstração concluída com sucesso!")
+        print(" Demonstração concluída com sucesso!")
         
         # Exemplo de predição
-        print("\n🎯 Testando predição com transação sintética...")
+        print("\n Testando predição com transação sintética...")
         transacao_teste = np.random.normal(0, 1.5, 30)  # Transação suspeita
         resultado = self.predizer_transacao(transacao_teste)
         
         if 'erro' not in resultado:
-            print(f"🔍 Resultado da predição: {resultado['predicao']}")
-            print(f"📊 Probabilidade de fraude: {resultado['probabilidade_fraude']:.3f}")
-            print(f"🎯 Confiança: {resultado['confianca']:.3f}")
-            print(f"🌳 Algoritmo: {resultado['algoritmo']}")
+            print(f" Resultado da predição: {resultado['predicao']}")
+            print(f" Probabilidade de fraude: {resultado['probabilidade_fraude']:.3f}")
+            print(f" Confiança: {resultado['confianca']:.3f}")
+            print(f" Algoritmo: {resultado['algoritmo']}")
         
         return True
 
@@ -1020,13 +1018,13 @@ def main():
     # Criar instância do sistema
     fraud_system = FraudDetectionSystem()
     
-    print("🔍 Sistema de Detecção de Fraudes - Credit Card Dataset")
-    print("🌳 Random Forest Manual com Árvores de Decisão Implementadas")
-    print("🏦 Especialmente desenvolvido para o dataset do Kaggle")
+    print(" Sistema de Detecção de Fraudes - Credit Card Dataset")
+    print(" Random Forest Manual com Árvores de Decisão Implementadas")
+    print(" Especialmente desenvolvido para o dataset do Kaggle")
     print("\n" + "=" * 60)
     
     # CORRIGIDO: Sempre usar dados sintéticos realistas se não encontrar arquivo
-    print("🎪 Executando com dados sintéticos do Credit Card Fraud...")
+    print(" Executando com dados sintéticos do Credit Card Fraud...")
     fraud_system.demonstracao_dados_sinteticos(mostrar_plots=False)
     
     return fraud_system
@@ -1037,7 +1035,7 @@ if __name__ == "__main__":
     
     # Exemplo de uso das funcionalidades
     print("\n" + "="*60)
-    print("📚 EXEMPLO DE USO DO SISTEMA:")
+    print(" EXEMPLO DE USO DO SISTEMA:")
     print("="*60)
     
     print("""
