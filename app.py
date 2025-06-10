@@ -19,8 +19,8 @@ import subprocess
 from backend import FraudDetectionSystem
 
 # Configuração do tema
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
+ctk.set_appearance_mode("dark")  
+ctk.set_default_color_theme("dark-blue")  
 
 class AnimatedProgressBar(ctk.CTkProgressBar):
     def __init__(self, *args, **kwargs):
@@ -115,7 +115,7 @@ class ModernCard(ctk.CTkFrame):
     
     def bind_hover_events(self):
         def on_enter(event):
-            self.configure(fg_color=("#e8f4f8", "#404040"))
+            self.configure(fg_color=("#ffffff", "#1a1a1a"))
         
         def on_leave(event):
             self.configure(fg_color=("#f8f9fa", "#2b2b2b"))
@@ -280,7 +280,7 @@ class AdvancedDataTable(ctk.CTkScrollableFrame):
                 self.table_container,
                 text="📄 Nenhum dado encontrado",
                 font=ctk.CTkFont(size=16),
-                text_color="#7f8c8d"
+                text_color=("#333", "#ccc")
             )
             no_data_label.pack(expand=True, pady=50)
             return
@@ -343,6 +343,7 @@ class FraudDetectionApp(ctk.CTk):
         self.geometry("1400x900")
         self.minsize(1200, 800)
         
+        
         self.fraud_system = FraudDetectionSystem()
         
         # Variáveis de estado
@@ -359,18 +360,21 @@ class FraudDetectionApp(ctk.CTk):
         
         # Auto-salvar configurações
         self.load_settings()
+        self.font_padrao = ctk.CTkFont(family="Inter", size=13)
+        self.font_titulo = ctk.CTkFont(family="Inter", size=24, weight="bold")
+
         
     def setup_styles(self):
         """Configura estilos customizados"""
         self.colors = {
-            'primary': '#3498db',
-            'success': '#27ae60',
+            'primary': '#5e35b1',     
+            'success': '#2ecc71',
             'danger': '#e74c3c',
             'warning': '#f39c12',
-            'info': '#17a2b8',
-            'secondary': '#6c757d'
-        }
-    
+            'info': '#5e35b1',       
+            'secondary': '#7f8c8d'
+}
+
     def setup_layout(self):
         """Configura o layout principal melhorado"""
         # Header moderno
@@ -422,8 +426,8 @@ class FraudDetectionApp(ctk.CTk):
             height=45,
             width=180,
             corner_radius=25,
-            fg_color=self.colors['primary'],
-            hover_color=("#2980b9", "#5dade2")
+            fg_color=self.colors['primary'], hover_color=("#732d91", "#9b59b6")
+
         )
         self.upload_btn.pack(pady=(0, 10))
         
@@ -546,7 +550,13 @@ class FraudDetectionApp(ctk.CTk):
         )
         self.progress_label.pack(pady=5)
         
-        self.progress_bar = AnimatedProgressBar(progress_frame, height=20)
+        self.progress_bar = AnimatedProgressBar(
+            progress_frame,
+            height=20,
+            progress_color="#5e35b1"  # ← Aqui está o roxo escuro!
+)
+        self.progress_bar.set(0)
+
         self.progress_bar.pack(fill="x", padx=20, pady=5)
         
         # Grid de cards estatísticos
