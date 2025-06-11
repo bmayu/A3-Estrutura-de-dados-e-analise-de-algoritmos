@@ -473,10 +473,10 @@ class FraudDetectionApp(ctk.CTk):
         # Botões de navegação
         self.nav_buttons = {}
         nav_items = [
-            ("dashboard", "📊 Dashboard", "Visão geral e estatísticas"),
-            ("data", "📋 Dados", "Visualizar dataset"),
-            ("reports", "📈 Relatórios", "Gráficos e métricas"),
-            ("settings", "⚙️ Configurações", "Preferências do sistema")
+            ("dashboard", "Dashboard", "Visão geral e estatísticas"),
+            ("data", "Dados", "Visualizar dataset"),
+            ("reports", "Relatórios", "Gráficos e métricas"),
+            ("settings", "Configurações", "Preferências do sistema")
         ]
         
         for page_id, title, description in nav_items:
