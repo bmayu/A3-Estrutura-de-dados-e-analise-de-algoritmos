@@ -1,5 +1,3 @@
-
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,13 +9,14 @@ from collections import Counter
 import random
 from math import log2, sqrt
 import time
+import mysql.connector
 
 warnings.filterwarnings('ignore')
 matplotlib.use('Agg')
 plt.style.use('dark_background')
 
 class DecisionTreeNode:
-    """Nó da Árvore de Decisão implementada manualmente"""
+    #Nó da arvore
     def __init__(self):
         self.feature_index = None
         self.threshold = None
@@ -31,7 +30,7 @@ class DecisionTreeNode:
         return self.value is not None
 
 class ManualDecisionTree:
-    """Árvore de Decisão implementada manualmente para detecção de fraudes"""
+    #Estrutura de Arvore
     
     def __init__(self, max_depth=10, min_samples_split=5, min_samples_leaf=2):
         self.max_depth = max_depth
@@ -80,7 +79,7 @@ class ManualDecisionTree:
         if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
             return 0
             
-        # Calcular entropia ponderada
+        # Calcular entropia
         total_samples = len(y)
         left_weight = np.sum(left_mask) / total_samples
         right_weight = np.sum(right_mask) / total_samples
@@ -217,7 +216,7 @@ class ManualDecisionTree:
 class ManualRandomForest:
     
     def __init__(self, n_estimators=100, max_depth=10, min_samples_split=5, 
-                 min_samples_leaf=2, max_features='sqrt', random_state=42):
+                 min_samples_leaf=2, max_features='sqrt', random_state=42, class_weight='balanced'):
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
@@ -520,12 +519,13 @@ class FraudDetectionSystem:
         try:
             # Criar e treinar Random Forest manual
             self.model = ManualRandomForest(
-                n_estimators=50,  # Reduzido para velocidade
-                max_depth=15,
-                min_samples_split=10,
-                min_samples_leaf=5,
-                max_features='sqrt',
-                random_state=42
+            n_estimators=200,  # Aumentado para melhor performance
+            max_depth=25,
+            min_samples_split=2,
+            min_samples_leaf=1,
+            max_features='sqrt',
+            random_state=42,
+            class_weight='balanced'  # Adicionado para lidar com desbalanceamento
             )
             
             self.model.fit(X_train, y_train)
@@ -888,7 +888,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
     def executar_pipeline_completo(self, caminho_csv, mostrar_plots=False):
         """Executa todo o pipeline de análise"""
         print("Iniciando Sistema de Detecção de Fraudes")
-        print(Credit Card Fraud Detection com Random Forest Manual")
+        print("Credit Card Fraud Detection com Random Forest Manual")
         print("=" * 60)
         
         try:
@@ -940,7 +940,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
         n_samples = 10000
         n_frauds = 300  # ~3% como no dataset real
         
-        print(f Gerando {n_samples} transações sintéticas ({n_frauds} fraudes)")
+        print("f Gerando {n_samples} transações sintéticas ({n_frauds} fraudes)")
         
         # Gerar features V1-V28 (simulando PCA components)
         legitimate_features = np.random.normal(0, 1, (n_samples - n_frauds, 28))
@@ -1002,6 +1002,34 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
             print(f" Algoritmo: {resultado['algoritmo']}")
         
         return True
+    
+import mysql.connector
+
+# Configurar a conexão
+config = {
+    'host': 'seu_host.mysql.database.azure.com',
+    'user': 'fraud_detector@seu_host',
+    'password': 'sua_senha_segura',
+    'database': 'fraud_detection',
+    'ssl_ca': '/path/to/BaltimoreCyberTrustRoot.crt.pem'
+}
+
+# Estabelecer conexão
+conn = mysql.connector.connect(**config)
+cursor = conn.cursor()
+
+# Exemplo de inserção de uma transação
+query = """
+INSERT INTO transactions (time, v1, v2, v28, amount, is_fraud)
+VALUES (%s, %s, %s, %s, %s, %s)
+"""
+values = (0, 1.2, -0.3, 0.5, 100.00, False)
+cursor.execute(query, values)
+conn.commit()
+
+# Fechar conexão
+cursor.close()
+conn.close()
 
 def main():
     """Função principal para teste"""
