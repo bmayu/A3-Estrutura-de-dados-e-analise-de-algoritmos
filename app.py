@@ -150,7 +150,7 @@ class RealTimeChart(ctk.CTkFrame):
     
     def clear_chart(self):
         self.ax.clear()
-        self.ax.text(0.5, 0.5, '📊 Carregue dados para ver o gráfico', 
+        self.ax.text(0.5, 0.5, 'Carregue dados para ver o gráfico', 
                     ha='center', va='center', transform=self.ax.transAxes,
                     fontsize=12, color='#888')
         self.ax.set_xticks([])
@@ -160,7 +160,7 @@ class RealTimeChart(ctk.CTkFrame):
     def update_chart(self, df):
         self.ax.clear()
         
-        # CORRIGIDO: Gráfico de distribuição de fraudes
+
         fraud_counts = df['Class'].value_counts()
         colors = ['#27ae60', '#e74c3c']
         labels = ['Legítimas', 'Fraudes']
@@ -514,13 +514,12 @@ class FraudDetectionApp(ctk.CTk):
         # Dashboard
         self.pages["dashboard"] = self.create_dashboard_page()
         
-        # Análise CORRIGIDA
+
         self.pages["analysis"] = self.create_analysis_page()
         
         # Dados
         self.pages["data"] = self.create_data_page()
-        
-        # Relatórios CORRIGIDOS
+
         self.pages["reports"] = self.create_reports_page()
         
         # Configurações
@@ -538,7 +537,7 @@ class FraudDetectionApp(ctk.CTk):
         )
         title_label.pack(pady=20)
         
-        # CORRIGIDO: Área de progresso com callback
+
         progress_frame = ctk.CTkFrame(page, height=80)
         progress_frame.pack(fill="x", padx=20, pady=10)
         progress_frame.pack_propagate(False)
@@ -558,7 +557,7 @@ class FraudDetectionApp(ctk.CTk):
         self.progress_bar.set(0)
 
         self.progress_bar.pack(fill="x", padx=20, pady=5)
-        
+
         # Grid de cards estatísticos
         cards_container = ctk.CTkFrame(page)
         cards_container.pack(fill="x", padx=20, pady=20)
@@ -612,7 +611,7 @@ class FraudDetectionApp(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             height=50,
             fg_color=self.colors['success'],
-            state="disabled"
+            #state="disabled"
         )
         self.action_buttons['analyze'].pack(side="left", padx=10)
         
@@ -623,14 +622,14 @@ class FraudDetectionApp(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             height=50,
             fg_color=self.colors['info'],
-            state="disabled"
+            #state="disabled"
         )
         self.action_buttons['export'].pack(side="right", padx=10)
         
         return page
     
     def create_analysis_page(self):
-        """CORRIGIDO: Cria página de análise detalhada com gráficos"""
+
         page = ctk.CTkFrame(self.content_area, fg_color="transparent")
         
         title_label = ctk.CTkLabel(
@@ -648,14 +647,13 @@ class FraudDetectionApp(ctk.CTk):
         self.analysis_charts_frame = ctk.CTkFrame(page, height=400)
         self.analysis_charts_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
-        # CORRIGIDO: Gráfico integrado para análise ML
         self.analysis_chart = RealTimeChart(self.analysis_charts_frame)
         self.analysis_chart.pack(fill="both", expand=True)
         
         # Texto inicial
         initial_text = ctk.CTkLabel(
             self.model_info_frame,
-            text="🤖 Carregue um dataset e execute a análise para ver:\n\n"
+            text="Carregue um dataset e execute a análise para ver:\n\n"
                  "• Métricas de performance do modelo\n"
                  "• Matriz de confusão interativa\n"
                  "• Importância dos atributos\n"
@@ -669,79 +667,95 @@ class FraudDetectionApp(ctk.CTk):
         return page
     
     def create_reports_page(self):
-        """CORRIGIDO: Cria página de relatórios com funcionalidade"""
+        # Definindo as cores padronizadas
+        selected_color = "#5e35b1"
+        selected_hover_color = "#512da8"
+        unselected_color = ("#e0e0e0", "#2b2b2b")
+        unselected_hover_color = ("#cccccc", "#3a3a3a")
+        text_color = ("#000000", "#ffffff")
+
         page = ctk.CTkFrame(self.content_area, fg_color="transparent")
-        
+
         title_label = ctk.CTkLabel(
             page,
             text="📈 Relatórios e Gráficos",
-            font=ctk.CTkFont(size=24, weight="bold")
+            font=ctk.CTkFont(size=24, weight="bold"),
+            text_color=text_color
         )
         title_label.pack(pady=20)
-        
-        # CORRIGIDO: Botões para diferentes tipos de gráficos com funções corretas
-        buttons_frame = ctk.CTkFrame(page)
+
+        buttons_frame = ctk.CTkFrame(page, fg_color="transparent")
         buttons_frame.pack(fill="x", padx=20, pady=20)
-        
-        # Container dos botões em grid
+
         buttons_container = ctk.CTkFrame(buttons_frame, fg_color="transparent")
         buttons_container.pack(expand=True, pady=20)
-        
-        # CORRIGIDO: Botões com funcionalidades reais
+
         self.report_buttons = {}
-        
+
         self.report_buttons['distribution'] = ctk.CTkButton(
             buttons_container,
             text="📊 Distribuição",
-            command=self.show_distribution_chart_corrected,
+            command=self.show_distribution_chart,
             height=40,
             width=180,
             font=ctk.CTkFont(size=14, weight="bold"),
-            state="disabled"
+            #state="disabled",
+            fg_color=unselected_color,
+            hover_color=unselected_hover_color,
+            text_color=text_color
         )
         self.report_buttons['distribution'].grid(row=0, column=0, padx=10, pady=10)
-        
+
         self.report_buttons['confusion'] = ctk.CTkButton(
             buttons_container,
             text="🎯 Matriz Confusão",
-            command=self.show_confusion_matrix_corrected,
+            command=self.show_confusion_matrix,
             height=40,
             width=180,
             font=ctk.CTkFont(size=14, weight="bold"),
-            state="disabled"
+            #state="disabled",
+            fg_color=unselected_color,
+            hover_color=unselected_hover_color,
+            text_color=text_color
         )
         self.report_buttons['confusion'].grid(row=0, column=1, padx=10, pady=10)
-        
+
         self.report_buttons['importance'] = ctk.CTkButton(
             buttons_container,
             text="📈 Importância",
-            command=self.show_feature_importance_corrected,
+            command=self.show_feature_importance,
             height=40,
             width=180,
             font=ctk.CTkFont(size=14, weight="bold"),
-            state="disabled"
+            #state="disabled",
+            fg_color=unselected_color,
+            hover_color=unselected_hover_color,
+            text_color=text_color
         )
         self.report_buttons['importance'].grid(row=1, column=0, padx=10, pady=10)
-        
+
         self.report_buttons['full_report'] = ctk.CTkButton(
             buttons_container,
             text="📋 Relatório Completo",
-            command=self.generate_full_report_corrected,
+            command=self.generate_full_report,
             height=40,
             width=180,
             font=ctk.CTkFont(size=14, weight="bold"),
-            state="disabled"
+            #state="disabled",
+            fg_color=unselected_color,
+            hover_color=unselected_hover_color,
+            text_color=text_color
         )
         self.report_buttons['full_report'].grid(row=1, column=1, padx=10, pady=10)
-        
+
         self.reports_content = ctk.CTkFrame(page)
         self.reports_content.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Gráfico para relatórios
+
         self.reports_chart = RealTimeChart(self.reports_content)
         self.reports_chart.pack(fill="both", expand=True)
-        
+
         return page
+
     
     def create_data_page(self):
         page = ctk.CTkFrame(self.content_area, fg_color="transparent")
@@ -779,39 +793,24 @@ class FraudDetectionApp(ctk.CTk):
         
         ctk.CTkLabel(theme_frame, text="🎨 Tema da Interface:", font=ctk.CTkFont(size=16, weight="bold")).pack(anchor="w", padx=20, pady=10)
         
-        theme_var = ctk.StringVar(value="dark")
+        self.theme_var = ctk.StringVar(value="dark")
+
         theme_options = ctk.CTkSegmentedButton(
-            theme_frame,
-            values=["light", "dark", "system"],
-            variable=theme_var,
-            command=self.change_theme
-        )
+        theme_frame,
+        values=["light", "dark", "system"],
+        variable=self.theme_var,
+        command=self.change_theme,
+    
+        selected_color="#5e35b1",            # roxo escuro selecionado
+        selected_hover_color="#512da8",      # hover mais escuro
+    
+        unselected_color=("#e0e0e0", "#2b2b2b"),           # claro / escuro
+        unselected_hover_color=("#cccccc", "#3a3a3a"),     # hover claro / escuro
+    
+        text_color=("#000000", "#ffffff")    # texto preto (modo claro), branco (modo escuro)
+)
         theme_options.pack(padx=20, pady=10)
-        
-        # Configurações de análise
-        analysis_frame = ctk.CTkFrame(settings_frame)
-        analysis_frame.pack(fill="x", padx=20, pady=20)
-        
-        ctk.CTkLabel(analysis_frame, text="🔬 Configurações de Análise:", font=ctk.CTkFont(size=16, weight="bold")).pack(anchor="w", padx=20, pady=10)
-        
-        # Auto-save results
-        self.auto_save_var = ctk.BooleanVar(value=True)
-        auto_save_check = ctk.CTkCheckBox(
-            analysis_frame,
-            text="Salvar resultados automaticamente",
-            variable=self.auto_save_var
-        )
-        auto_save_check.pack(anchor="w", padx=20, pady=5)
-        
-        # Show notifications
-        self.notifications_var = ctk.BooleanVar(value=True)
-        notifications_check = ctk.CTkCheckBox(
-            analysis_frame,
-            text="Mostrar notificações",
-            variable=self.notifications_var
-        )
-        notifications_check.pack(anchor="w", padx=20, pady=5)
-        
+
         return page
     
     def upload_csv(self):
@@ -911,17 +910,17 @@ class FraudDetectionApp(ctk.CTk):
             return
         
         self.processing_start_time = time.time()
-        self.update_status("🚀 Iniciando análise completa...")
-        self.update_progress_threaded(0.0, "🚀 Iniciando análise...")
+        self.update_status("Iniciando análise completa...")
+        self.update_progress_threaded(0.0, "Iniciando análise...")
         
         # Desabilitar botão durante processamento
-        self.action_buttons['analyze'].configure(state="disabled")
+        self.action_buttons['analyze'].configure()
         
         # Executar em thread
-        self.analysis_thread = threading.Thread(target=self.process_analysis_corrected, daemon=True)
+        self.analysis_thread = threading.Thread(target=self.process_analysis, daemon=True)
         self.analysis_thread.start()
     
-    def process_analysis_corrected(self):
+    def process_analysis(self):
         try:
             # Etapa 1: Análise exploratória
             self.update_progress_threaded(0.15, "📊 Realizando análise exploratória...")
@@ -957,10 +956,10 @@ class FraudDetectionApp(ctk.CTk):
             self.update_progress_threaded(1.0, "✅ Análise concluída com sucesso!")
             
             # Atualizar interface na thread principal
-            self.after(0, self.on_analysis_complete_corrected)
+            self.after(0, self.on_analysis_complete)
             
         except Exception as e:
-            self.after(0, lambda: self.on_analysis_error_corrected(str(e)))
+            self.after(0, lambda: self.on_analysis_error(str(e)))
     
     def update_progress_threaded(self, value, text):
 
@@ -981,7 +980,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             print(f"Erro ao agendar atualização: {e}")
     
-    def on_analysis_complete_corrected(self):
+    def on_analysis_complete(self):
 
         try:
             processing_time = time.time() - self.processing_start_time if self.processing_start_time else 0
@@ -997,7 +996,7 @@ class FraudDetectionApp(ctk.CTk):
                     btn.configure(state="normal")
             
             # Atualizar informações do modelo
-            self.update_model_info_corrected()
+            self.update_model_info()
             
             # Carregar primeiro gráfico na aba de análise
             self.load_analysis_chart()
@@ -1023,7 +1022,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             print(f"Erro ao finalizar análise: {e}")
     
-    def on_analysis_error_corrected(self, error_msg):
+    def on_analysis_error(self, error_msg):
         """Callback para erros na análise"""
         try:
             if hasattr(self, 'action_buttons'):
@@ -1052,7 +1051,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             print(f"Erro ao carregar gráfico de análise: {e}")
     
-    def update_model_info_corrected(self):
+    def update_model_info(self):
         try:
             # Limpar conteúdo anterior
             if hasattr(self, 'model_info_frame'):
@@ -1120,7 +1119,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             print(f"Erro ao atualizar informações do modelo: {e}")
     
-    def show_distribution_chart_corrected(self):
+    def show_distribution_chart(self):
         try:
             image_path = "imagens/grafico_distribuicao.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1132,7 +1131,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao carregar gráfico:\n{str(e)}")
     
-    def show_confusion_matrix_corrected(self):
+    def show_confusion_matrix(self):
         try:
             image_path = "imagens/matriz_confusao.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1143,7 +1142,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao carregar matriz:\n{str(e)}")
     
-    def show_feature_importance_corrected(self):
+    def show_feature_importance(self):
         try:
             image_path = "imagens/importancia.png"
             if self.reports_chart.load_image_from_file(image_path):
@@ -1154,7 +1153,7 @@ class FraudDetectionApp(ctk.CTk):
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao carregar gráfico:\n{str(e)}")
     
-    def generate_full_report_corrected(self):
+    def generate_full_report(self):
         try:
             # Abrir o arquivo de relatório se existir
             report_path = "relatorio_fraudes.txt"
@@ -1332,7 +1331,7 @@ class FraudDetectionApp(ctk.CTk):
         # Status principal
         self.status_label = ctk.CTkLabel(
             status_frame,
-            text="💡 Sistema pronto - Carregue um dataset para começar a análise",
+            text="Sistema pronto - Carregue um dataset para começar a análise",
             font=ctk.CTkFont(size=12)
         )
         self.status_label.pack(side="left", padx=15, pady=10)
@@ -1398,3 +1397,9 @@ if __name__ == "__main__":
         print(f"❌ Erro ao iniciar aplicação: {e}")
         import traceback
         traceback.print_exc()# app.py - ARQUIVO COMPLETO COM TODO
+
+
+
+
+
+        
