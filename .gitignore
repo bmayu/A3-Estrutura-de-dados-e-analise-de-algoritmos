@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-venv/
-.env
-*.csv
-data/raw/
-data/processed/
