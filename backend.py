@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 matplotlib.use('Agg')
 plt.style.use('dark_background')
 
-class DecisionTreeNode:
+class DecisionTreeNode: 
     #Nó da arvore
     def __init__(self):
         self.feature_index = None
@@ -356,7 +356,7 @@ class FraudDetectionSystem:
         try:
             df = pd.read_csv(caminho_arquivo)
             print(f" Dados carregados: {len(df)} registros, {len(df.columns)} colunas")
-            
+            caminho_arquivo = df
             # Verificar estrutura esperada do dataset
             expected_columns = ['Time', 'Amount', 'Class'] + [f'V{i}' for i in range(1, 29)]
             
@@ -519,7 +519,7 @@ class FraudDetectionSystem:
         try:
             # Criar e treinar Random Forest manual
             self.model = ManualRandomForest(
-            n_estimators=200,  # Aumentado para melhor performance
+            n_estimators=10,  # Aumentado para melhor performance
             max_depth=25,
             min_samples_split=2,
             min_samples_leaf=1,
@@ -725,6 +725,92 @@ class FraudDetectionSystem:
             if 'fig' in locals():
                 plt.close(fig)
             return None
+        
+    def conectar_banco(self):
+        config = {
+            'host': 'localhost',
+            'port': 3306,
+            'user': 'root',
+            'password': 'Anhembis2024',
+            'database': 'fraud_detection'
+        }
+        return mysql.connector.connect(**config)
+    
+    def salvar_metricas_banco(self):
+
+        try:
+            con = self.conectar_banco()
+            cursor = con.cursor()
+            query = """
+                INSERT INTO model_metrics (accuracy, precision_score, recall, f1_score,
+                true_positives, false_positives, true_negatives, false_negatives)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            valores = (
+                float(self.metrics['accuracy']),
+                float(self.metrics['precision']),
+                float(self.metrics['recall']),
+                float(self.metrics['f1_score']),
+                float(self.metrics['tp']),
+                float(self.metrics['fp']),
+                float(self.metrics['tn']),
+                float(self.metrics['fn']),)
+            cursor.execute(query, valores)
+            con.commit()
+            cursor.close()
+            con.close()
+            print("📊 Métricas salvas no banco de dados com sucesso.")
+        except Exception as e:
+            print(f"❌ Erro ao salvar métricas no banco: {str(e)}")
+
+    '''def salvar_importancias_banco(self, top_n=5):
+
+        try:
+            top_features = self.mostrar_importancia(salvar_arquivo=False, top_n=top_n)
+            if not top_features:
+                print("❌ Nenhuma importância calculada.")
+                return
+
+            con = self.conectar_banco()
+            cursor = con.cursor()
+            query = "INSERT INTO feature_importance (feature_name, importance FLOAT) VALUES (%s, %s)"
+
+            for nome, importancia in top_features.items():
+                cursor.execute(query, (nome, importancia))
+
+            con.commit()
+            cursor.close()
+            con.close()
+            print("📈 Importância das features salva no banco de dados.")
+        except Exception as e:
+            print(f"❌ Erro ao salvar importâncias no banco: {str(e)}")
+
+    #def salvar_transacao_banco(self, transacao_dict):
+        try:
+            con = self.conectar_banco()
+            cursor = con.cursor()
+
+            query = """
+            INSERT INTO transactions (time, amount, is_fraud,
+            v1, v2, v3, v4, v5, v6, v7, v8, v9, v10,
+            v11, v12, v13, v14, v15, v16, v17, v18, v19,
+            v20, v21, v22, v23, v24, v25, v26, v27, v28)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            valores = (
+                transacao_dict['time'],
+                transacao_dict['amount'],
+                transacao_dict['is_fraud'],
+                *transacao_dict['features']  # 28 valores
+            )
+            cursor.execute(query, valores)
+            con.commit()
+            cursor.close()
+            con.close()
+            print("💾 Transação salva no banco de dados.")
+        except Exception as e:
+            print(f"❌ Erro ao salvar transação: {str(e)}")'''
     
     def gerar_relatorio_completo(self):
         """Gera relatório completo da análise"""
@@ -749,6 +835,7 @@ class FraudDetectionSystem:
             taxa_fraude = (total_fraudes / total_transacoes) * 100 if total_transacoes > 0 else 0
             
             relatorio = f"""
+    
 RELATÓRIO COMPLETO - DETECÇÃO DE FRAUDES
  RESUMO DOS DADOS:
 • Dataset: Credit Card Fraud Detection (Kaggle)
@@ -884,6 +971,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
             
         except Exception as e:
             return {"erro": f"Erro na predição: {str(e)}"}
+
     
     def executar_pipeline_completo(self, caminho_csv, mostrar_plots=False):
         """Executa todo o pipeline de análise"""
@@ -929,6 +1017,7 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
         except Exception as e:
             print(f" Erro no pipeline: {str(e)}")
             return False
+        
     
     def demonstracao_dados_sinteticos(self, mostrar_plots=False):
         """Demonstração do sistema com dados sintéticos do tipo Credit Card"""
@@ -1003,33 +1092,6 @@ Random Forest Manual implementado especificamente para Credit Card Fraud Detecti
         
         return True
     
-import mysql.connector
-
-# Configurar a conexão
-config = {
-    'host': 'seu_host.mysql.database.azure.com',
-    'user': 'fraud_detector@seu_host',
-    'password': 'sua_senha_segura',
-    'database': 'fraud_detection',
-    'ssl_ca': '/path/to/BaltimoreCyberTrustRoot.crt.pem'
-}
-
-# Estabelecer conexão
-conn = mysql.connector.connect(**config)
-cursor = conn.cursor()
-
-# Exemplo de inserção de uma transação
-query = """
-INSERT INTO transactions (time, v1, v2, v28, amount, is_fraud)
-VALUES (%s, %s, %s, %s, %s, %s)
-"""
-values = (0, 1.2, -0.3, 0.5, 100.00, False)
-cursor.execute(query, values)
-conn.commit()
-
-# Fechar conexão
-cursor.close()
-conn.close()
 
 def main():
     """Função principal para teste"""
@@ -1043,6 +1105,7 @@ def main():
     
     # CORRIGIDO: Sempre usar dados sintéticos realistas se não encontrar arquivo
     print(" Executando com dados sintéticos do Credit Card Fraud...")
+    
     fraud_system.demonstracao_dados_sinteticos(mostrar_plots=False)
     
     return fraud_system
@@ -1050,17 +1113,19 @@ def main():
 if __name__ == "__main__":
     # Executar sistema
     sistema = main()
-    
+        # Salvar no banco
+    sistema.salvar_metricas_banco()
+    sistema.salvar_importancias_banco()
     # Exemplo de uso das funcionalidades
     print("\n" + "="*60)
     print(" EXEMPLO DE USO DO SISTEMA:")
     print("="*60)
     
     print("""
-# Para usar o sistema com seu dataset:
+Para usar o sistema com seu dataset:
 sistema = FraudDetectionSystem()
 
-# Carregar e analisar dados reais:
+Carregar e analisar dados reais:
 sucesso = sistema.executar_pipeline_completo('creditcard.csv')
 
 # Ou executar demonstração:
@@ -1082,3 +1147,4 @@ sistema.demonstracao_dados_sinteticos(mostrar_plots=True)
 # - Bootstrap sampling para cada árvore
 # - Votação majoritária para classificação
 """)
+
